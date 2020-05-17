@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "583189995027",
+    "firebase_url": "https://fir-fumi.firebaseio.com",
+    "project_id": "fir-fumi",
+    "storage_bucket": "fir-fumi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:583189995027:android:3a2891b8ce3ea1480fe9e6",
+        "android_client_info": {
+          "package_name": "com.example.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "583189995027-7he0800kg5utvs3vlq9cvnnenqhttfc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXdcqgE3kQdJLsmAT7PDy7BzOVixHQjV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "583189995027-7he0800kg5utvs3vlq9cvnnenqhttfc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
