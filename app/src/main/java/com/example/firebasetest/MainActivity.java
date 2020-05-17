@@ -40,6 +40,7 @@ TextView lon;
 Localisation localisation;
 Spinner spinnerMeeting;
 ArrayAdapter<String> spinnerAdapter;
+ArrayAdapter<String> spinnerNameAdapter;
 Spinner spinnerNames;
 FirebaseFirestore datastore;
 Meeting meetings[] = new Meeting[10];
@@ -69,7 +70,8 @@ Meeting meetings[] = new Meeting[10];
         spinnerMeeting.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("TAG", "onItemSelected: ");
+                getMeetingNameList(spinnerAdapter.getItem(i));
+                Log.d("TAG", spinnerAdapter.getItem(i));
             }
 
             @Override
@@ -80,6 +82,9 @@ Meeting meetings[] = new Meeting[10];
 
         spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,new ArrayList<String>());
         spinnerMeeting.setAdapter(spinnerAdapter);
+
+        spinnerNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,new ArrayList<String>());
+        spinnerNames.setAdapter(spinnerNameAdapter);
     }
 
     private Runnable meetingRun = new Runnable() {
@@ -98,12 +103,32 @@ Meeting meetings[] = new Meeting[10];
         }
     };
 
-    public void getMeetingNameList(String meetingName){
+    public void getMeetingNameList(final String meetingName){
+        //final ArrayList<String> newMeeting = new ArrayList<>();
+        final List<Map<String, Object>> meetingData = new ArrayList<Map<String, Object>>();
         final ArrayList<String> meetingNames = new ArrayList<>();
-        String list = datastore.collection("meeting").document(meetingName)
-                .get().toString();
-        Log.d("list",list);
+        datastore.collection("meeting")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                              if(meetingName==document.getId()){
+                                  meetingData.add(document.getData());
 
+                              }
+                            }
+                        } else {
+                            Log.d("doc", "Error getting documents: ", task.getException());
+                        }
+                        spinnerNameAdapter.clear();
+                        spinnerNameAdapter.addAll(meetingData.toString());
+                        spinnerNameAdapter.notifyDataSetChanged();
+                        spinnerNames.setAdapter(spinnerNameAdapter);
+
+                    }
+                });
         spinnerNames.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, meetingNames));
     }
 
@@ -111,7 +136,7 @@ Meeting meetings[] = new Meeting[10];
         final ArrayList<String> meetingId = new ArrayList<>();
         //final ArrayList<String> newMeeting = new ArrayList<>();
         final List<Map<String, Object>> meetingData = new ArrayList<Map<String, Object>>();
-        final Integer[] i = {0};
+        //final Integer[] i = {0};
         final int[] j = new int[1];
         datastore.collection("meeting")
                 .get()
@@ -123,7 +148,7 @@ Meeting meetings[] = new Meeting[10];
                                 //Log.d("doc", document.getId() + " => " + document.getData());
                                 meetingId.add(document.getId());
                                 meetingData.add(document.getData());
-                                i[0] = i[0] +1;
+                                //i[0] = i[0] +1;
 
                             }
                         } else {
